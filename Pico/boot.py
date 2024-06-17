@@ -14,7 +14,7 @@ def connect():
 
         # set power mode to get WiFi power-saving off (if needed)
         wlan.config(pm = 0xa11140)
-        wlan.connect(secrets.SSID, secrets.PASS)  # Your WiFi Credential
+        wlan.connect(secrets.WIFI_SSID, secrets.WIFI_PASS)  # Your WiFi Credential
         print('Waiting for connection...', end='')
         
         # Check if it is connected otherwise wait
