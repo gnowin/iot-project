@@ -3,41 +3,60 @@ from machine import Pin, PWM
 import dht
 from umqtt.simple import MQTTClient
 import random
+import math
 import json
 
 import secrets
 
-# Set the OUTPUT pin to on-board LED
-led = Pin("LED", Pin.OUT)
-
-ledR = Pin(2, Pin.OUT)
-ledG = Pin(11, Pin.OUT)
-ledB = Pin(15, Pin.OUT)
-
-tempSensor = dht.DHT11(Pin(16))
-buzzer = PWM(Pin(17))
+temperatures = [17, 27]
 
 # MQTT Client 
 ClientID = f'raspberry-sub-{time.time_ns()}'
 topic = "pico/mqtt"
-#msg = b'{"msg":"hello"}'
 
 def main():
     client = MQTTClient(ClientID, secrets.MQTT_SERVER, 1883)
 
-    # Try to connect, reconnect
+    # On-board LED
+    led = Pin("LED", Pin.OUT)
+
+    # DHT11 sensor
+    sensor = dht.DHT11(Pin(16))
+
+    # Piezo
+    buzzer = PWM(Pin(17))
+
+    # RGB LED
+    ledR = PWM(Pin(11), freq=300_00, duty_u16=0)
+    #ledG = PWM(Pin(15), freq=300_00, duty_u16=0)
+    ledB = PWM(Pin(14), freq=300_00, duty_u16=0)
+
+    #Try to connect, reconnect
     # try:
     #     connect(client)
     # except OSError as e:
     #     reconnect(client)
 
+    currentTemp = 0
+
+
     # Main loop
     while True:
-        time.sleep(1)
-        getTemperature()
-        beep()
-        colortest()
+        temp, hum = readSensor(sensor)
+
+        if currentTemp > temp:
+            beep(buzzer)
+        elif currentTemp < temp:
+            beep(buzzer)
+
+        currentTemp = temp
+
+
+        # temp += 1
+        updateLed(temp, R=ledR, B=ledB)
+        time.sleep(3)
         #send_data(client)
+
 
 def connect(c):
     c.connect()
@@ -48,12 +67,7 @@ def reconnect(c):
     time.sleep(5)
     c.reconnect()
 
-def send_data(c):
-
-    msg = {
-                "test1": random.randrange(0, 25)
-           }
-
+def send_data(c, led, msg):
     print('send message %s on topic %s' % (msg, topic))
     try: 
         c.publish(topic, json.dumps(msg), qos=0)
@@ -65,35 +79,34 @@ def send_data(c):
     time.sleep(0.8)
 
 
-def getTemperature():
+def readSensor(s):
     try:
-        tempSensor.measure()
-        temperature = tempSensor.temperature()
-        humidity = tempSensor.humidity()
+        s.measure()
+        temperature = s.temperature()
+        humidity = s.humidity()
         print("Temperature is {} degrees Celsius and Humidity is {}%".format(temperature, humidity))
+
+        return temperature, humidity
     except Exception as error:
         print("Exception occurred", error)
     time.sleep(2)
 
-def beep():
+def updateLed(temp, R, B):
+        if(temp <= temperatures[0]):
+            colorVal = 1
+        elif(temp >= temperatures[1]):
+            colorVal = 0
+        else:
+            colorVal = (temperatures[1] - temp) / (temperatures[1] - temperatures[0])
+
+        R.duty_u16(int(2**16*(1 - colorVal)))
+        B.duty_u16(int(2**16*colorVal))
+
+def beep(buzzer):
     buzzer.duty_u16(1000)
     buzzer.freq(500)
-    time.sleep(0.3)
+    time.sleep(0.1)
     buzzer.duty_u16(0)
-
-def colortest():
-    ledR.value(1.0)
-    ledG.value(0.0)
-    ledB.value(0.0)
-    time.sleep(0.5)
-    ledR.value(0.0)
-    ledG.value(1.0)
-    ledB.value(0.0)
-    time.sleep(0.5)
-    ledR.value(0.0)
-    ledG.value(0.0)
-    ledB.value(1.0)
-    time.sleep(0.5)
 
 try:
     main()
