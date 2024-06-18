@@ -32,30 +32,41 @@ def main():
     ledB = PWM(Pin(14), freq=300_00, duty_u16=0)
 
     #Try to connect, reconnect
-    # try:
-    #     connect(client)
-    # except OSError as e:
-    #     reconnect(client)
+    try:
+        connect(client)
+    except OSError as e:
+        reconnect(client)
 
-    currentTemp = 0
+    lastTemp = 0
 
 
     # Main loop
     while True:
+        # Read sensor values
         temp, hum = readSensor(sensor)
 
-        if currentTemp > temp:
-            beep(buzzer)
-        elif currentTemp < temp:
-            beep(buzzer)
+        if lastTemp < temp:
+            # Low beep, temperature went down
+            beep(buzzer, 300)
+        elif lastTemp > temp:
+            # High beep, temperature went up
+            beep(buzzer, 700)
 
-        currentTemp = temp
-
-
-        # temp += 1
+        lastTemp = temp
+        
+        # Change LED color
         updateLed(temp, R=ledR, B=ledB)
-        time.sleep(3)
-        #send_data(client)
+
+        # Prepare message data
+        msg = {
+            "temperature": temp,
+            "humidity": hum
+        }
+
+        # Send data
+        send_data(client, led, msg)
+
+        time.sleep(5)
 
 
 def connect(c):
@@ -102,9 +113,9 @@ def updateLed(temp, R, B):
         R.duty_u16(int(2**16*(1 - colorVal)))
         B.duty_u16(int(2**16*colorVal))
 
-def beep(buzzer):
+def beep(buzzer, f):
     buzzer.duty_u16(1000)
-    buzzer.freq(500)
+    buzzer.freq(f)
     time.sleep(0.1)
     buzzer.duty_u16(0)
 
