@@ -2,8 +2,6 @@ import time
 from machine import Pin, PWM
 import dht
 from umqtt.simple import MQTTClient
-import random
-import math
 import json
 
 import secrets
@@ -45,10 +43,10 @@ def main():
         # Read sensor values
         temp, hum = readSensor(sensor)
 
-        if lastTemp < temp:
+        if lastTemp > temp:
             # Low beep, temperature went down
             beep(buzzer, 300)
-        elif lastTemp > temp:
+        elif lastTemp < temp:
             # High beep, temperature went up
             beep(buzzer, 700)
 
@@ -66,17 +64,18 @@ def main():
         # Send data
         send_data(client, led, msg)
 
-        time.sleep(5)
+        time.sleep(60)
 
 
 def connect(c):
+    print('Trying to connect to MQTT Broker "%s"' % (secrets.MQTT_SERVER))
     c.connect()
     print('Connected to MQTT Broker "%s"' % (secrets.MQTT_SERVER))
 
 def reconnect(c):
     print('Failed to connect to MQTT broker, Reconnecting...')
     time.sleep(5)
-    c.reconnect()
+    c.connect()
 
 def send_data(c, led, msg):
     print('send message %s on topic %s' % (msg, topic))
@@ -123,10 +122,3 @@ try:
     main()
 except OSError as e:
     print(f"Error:{e}")
-
-# # Runs forever
-# while True:
-#     led.on()              # Turn on LED
-#     time.sleep(0.2)       # Delay for 0.2 seconds
-#     led.off()             # Turn off LED
-#     time.sleep(1.0)       # Delay for 1.0 seconds
