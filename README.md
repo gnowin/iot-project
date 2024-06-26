@@ -72,8 +72,19 @@ This is a simplified view of the wiring, showing what types of resistors are use
 
 
 ##    Platform
+I had an old laptop laying around that I wanted to turn into a server, so early on I made the choice to self-host the server side of the project. I also wanted to try out Docker for the first time.
+
+On my laptop I installed Ubuntu Server, but as I set this up with docker it sohuld work on most operating systems. Before deploying it on my Ubuntu Server I worked on it on my Windows 10 computer.
+
+The server's stack consists of the following:
+* Eclipse Mosquitto: MQTT Broker
+* Telegraf: Gathers data from MQTT Broker and sends it to database
+* InfluxDB: Time-series database
+* Grafana: Connects to the InfluxDB database. Grafana provides a multitude of visualization options to display data, e.g. different graphs.
 
 ##    The code
+
+
 
 ##    Transmitting the data / connectivity
 
