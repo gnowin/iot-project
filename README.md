@@ -23,22 +23,26 @@ In addition, you need a breadboard, resistors, jumper wires and a USB-A to micro
 
 ###    Raspberry Pi Pico WH
 The Raspberry Pi Pico WH is the microcontroller used in the project. It has a micro-USB port that is used to give it power and to program it by uploading code. There are ground, power and GPIO pins so that electrical components can be connected and controlled by the microcontroller. This microcontroller can also connect to WIFI which makes it able to send and recieve messages wirelessly.
-![pico](https://hackmd.io/_uploads/HJZ9uBdL0.jpg)
+
+<img src="https://github.com/gnowin/iot-project/assets/100692493/f471fdd4-94a1-4c5e-bd69-ecc444c994b7" alt="pico" style="width:50%;"/>
 
 
 ###    DHT11
 A sensor that measures both humidity and temperature.
-![dht11](https://hackmd.io/_uploads/SkgTuS_8C.jpg)
+
+<img src="https://github.com/gnowin/iot-project/assets/100692493/8af396f4-aee0-4e85-ad96-587265f504fc" alt="dht11" style="width:50%;"/>
 
 
 ###    Piezo
 A piezo can detect vibrations and make noises.
-![piezo](https://hackmd.io/_uploads/rJIauS_UR.jpg)
+
+<img src="https://github.com/gnowin/iot-project/assets/100692493/4f787bc6-96eb-4d2e-aee0-624b47ec20e8" alt="piezo" style="width:50%;"/>
 
 
 ###    RGB LED
 An LED that can display a multitude of colors. It has one pin for power, and three pins that correspond to the intensity of the red, green and blue color channels to light up in different colors.
-![LED](https://hackmd.io/_uploads/SyX1tH_UR.jpg)
+
+<img src="https://github.com/gnowin/iot-project/assets/100692493/275643b6-6dea-4d1e-8785-101b64a72f7f" alt="rgbled" style="width:50%;"/>
 
 
 ##    Computer setup
@@ -61,7 +65,8 @@ To make Pymakr work, you need to install Node.js. You can download it from their
 To use Raspberry Pi Pico WH and upload micropython files from your computer, you need to update its firmware. The micropython firmware can be downloaded from [this](https://micropython.org/download/RPI_PICO_W/) website. Follow the installation instructions.
 
 ##    Putting everything together
-![Wiring](https://hackmd.io/_uploads/r1gLpBuLA.png)
+
+<img src="https://github.com/gnowin/iot-project/assets/100692493/c6f84446-b17f-45d3-b00c-db5fa1ac49fd" alt="wiring_diagram" style="width:50%;"/>
 
 This is a simplified view of the wiring, showing what types of resistors are used and which pins the different components are connected to. This image is created in WokWi, and as there were no DHT11 component, a DHT22 sensor is shown instead. However, the amount of pins are the same for both sensors so the wiring is correct otherwise.
 
