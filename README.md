@@ -192,5 +192,11 @@ def send_data(c, led, msg):
 ```
 
 ##    Presenting the data
+<img src="https://github.com/gnowin/iot-project/assets/100692493/c6a61c10-213c-4201-b367-4bcdf54784b3" alt="grafanapc" style="width:100%;"/>
+
+<img src="https://github.com/gnowin/iot-project/assets/100692493/7e5d7b7c-5ef8-43d7-af50-cde740674a59" alt="grafanamobile" style="width:50%;"/>
+
 
 ##    Finalizing the design
+<img src="https://github.com/gnowin/iot-project/assets/100692493/7fb8958b-f80d-49b3-96c1-c5bd53c4067d" alt="finalresult" style="width:100%;"/>
+
