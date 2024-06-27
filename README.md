@@ -7,7 +7,7 @@ This project should take approximately 2-8 hours to finish depending on your fam
 ##     Objective
 I chose this project as I thought it would be interesting to be able to gather data on the temperatures and humidity levels throughout the day in my apartment. This meant I could see for example how much of a difference an open window has on the temperature, or what the conditions are like while I sleep.
 
-For this project I also decided to host the server side myself. This is because I already had plans to make a home server and wanted to make use of it right away. Through this I could also use Docker for the first time and gain some new knowledge.
+For this project I also decided to host the server side myself. This is because I already had plans to make a home server and wanted to make use of it right away. Through this I could also use Docker for the first time and learn how to use it.
 
 ##    Material
 Below is a table of the main components used in the project.
@@ -19,7 +19,7 @@ Below is a table of the main components used in the project.
 | Piezo                | [Electrokit](https://www.electrokit.com/piezoelement-12x5.5mm)              | 15 SEK  |
 | RGB LED              | [Electrokit](https://www.electrokit.com/led-rgb-5mm-adresserbar-ws2812d-f5) | 5 SEK   |
 
-In addition, you need a breadboard, resistors, jumper wires and a USB-A to micro USB cable. These can all be bought at Electrokit. An example of what resistors and wires needed and how they can be connected will be provided later on.
+In addition, you need a breadboard, resistors, jumper wires and a USB-A to micro USB cable. These can all be bought at Electrokit. An example of what resistors and wires needed and how they can be connected will be provided later on in [Putting Everything Together](#Putting-everything-together).
 
 ###    Raspberry Pi Pico WH
 The Raspberry Pi Pico WH is the microcontroller used in the project. It has a micro-USB port that is used to give it power and to program it by uploading code. There are ground, power and GPIO pins so that electrical components can be connected and controlled by the microcontroller. This microcontroller can also connect to WiFi which makes it able to send and recieve messages wirelessly.
@@ -59,7 +59,7 @@ The IDE I used for this project is Visual Studio Code, which can be downloaded [
 To interact with the microcontroller I used Pymakr. It is a Visual Studio Code extension you can download by searching on it in the extensions tab in the application. A guide to getting started can be read [here](https://github.com/sg-wireless/pymakr-vsc/blob/HEAD/GET_STARTED.md).
 
 ### Node.js
-To make Pymakr work, you need to install Node.js. You can download it from their [website](https://nodejs.org/en).
+Pymakr needs Node.js to work, you can download it from their [website](https://nodejs.org/en).
 
 ### Micropython firmware
 To use Raspberry Pi Pico WH and upload micropython files from your computer, you need to update its firmware. The micropython firmware can be downloaded from [this](https://micropython.org/download/RPI_PICO_W/) website. Follow the installation instructions.
@@ -68,19 +68,20 @@ To use Raspberry Pi Pico WH and upload micropython files from your computer, you
 
 <img src="https://github.com/gnowin/iot-project/assets/100692493/c6f84446-b17f-45d3-b00c-db5fa1ac49fd" alt="wiring_diagram" style="width:50%;"/>
 
-This is a simplified view of the wiring, showing what types of resistors are used and which pins the different components are connected to. This image is created in WokWi, and as there were no DHT11 component, a DHT22 sensor is shown instead. However, the amount of pins are the same for both sensors so the wiring is correct otherwise.
-
+This is a simplified view of the wiring, showing what types of resistors are used and which pins the different components are connected to. This image is created in WokWi, and as there was no DHT11 component present in the application, a DHT22 sensor is shown instead. However, the purpose is to show how you could wire it and the amount of pins are and same for both sensors so the wiring is correct anyways.
 
 ##    Platform
-I had an old laptop laying around that I wanted to turn into a server, so early on I made the choice to self-host the server side of the project. I also wanted to try out Docker for the first time.
+I had an old laptop laying around that I wanted to turn into a server, so early on I made the decision to self-host the server side of the project. I also wanted to try out Docker for the first time.
 
-On my laptop I installed Ubuntu Server, but as I set this up with docker it sohuld work on most operating systems. Before deploying it on my Ubuntu Server I worked on it on my Windows 10 computer.
+I installed Ubuntu Server on the laptop, but as I set this up with Docker it should work on most operating systems. Before deploying it on my Ubuntu Server I worked on it on my Windows 10 computer.
 
 The server's stack consists of the following:
-* Eclipse Mosquitto: MQTT Broker
-* Telegraf: Gathers data from MQTT Broker and sends it to database
-* InfluxDB: Time-series database
+* Eclipse Mosquitto: MQTT Broker.
+* Telegraf: Gathers data from MQTT Broker and sends it to database.
+* InfluxDB: Time-series database.
 * Grafana: Connects to the InfluxDB database. Grafana provides a multitude of visualization options to display data, e.g. different graphs.
+
+There are configuration files in the repository that can be changed for anyones liking. However, only the "CHANGEME" rows in the ".env" have to be changed to get the server side working. Read the additional "README" files for further instructions.
 
 ##    The code
 In the boot file, there is code that attempts to connect to a WiFi network through the [network](https://docs.micropython.org/en/latest/library/network.html) library, and then tests the connection by using the [socket](https://docs.micropython.org/en/latest/library/socket.html) library. The WiFi network credentials are stored in a secrets file. These libraries are built-in modules within micropython. I will not go through the details of these functions, but they are called through two different error exception handlings.
@@ -192,17 +193,23 @@ def send_data(c, led, msg):
 ```
 
 ##    Presenting the data
-Using Grafana I have built a dashboard to visualize my data.
+Using Grafana I have built a dashboard to visualize my data. The dashboard consists of one graph and one gauge each for both temperature and humidity. The graph shows the data values over time, and the gauge shows the current value (the value sent last).
+
+Here is the view on my computer:
 
 <img src="https://github.com/gnowin/iot-project/assets/100692493/c6a61c10-213c-4201-b367-4bcdf54784b3" alt="grafanapc" style="width:100%;"/>
 
-<img src="https://github.com/gnowin/iot-project/assets/100692493/7e5d7b7c-5ef8-43d7-af50-cde740674a59" alt="grafanamobile" style="width:50%;"/>
+And here is the view on mobile. The left picture is the dashboard when fully scrolled up, and the right one is when you scroll down past the gauges.
 
-<img src="https://github.com/gnowin/iot-project/assets/100692493/4f1c7405-3e84-447b-b7ab-244811bb9f92" alt="grafanamobile2" style="width:50%;"/>
+<img src="https://github.com/gnowin/iot-project/assets/100692493/7e5d7b7c-5ef8-43d7-af50-cde740674a59" alt="grafanamobile" style="width:49%;"/>
 
+<img src="https://github.com/gnowin/iot-project/assets/100692493/4f1c7405-3e84-447b-b7ab-244811bb9f92" alt="grafanamobile2" style="width:49%;"/>
 
-
+By default and in my testing, the data is just perserved for four days, but this can be changed in the configurations.
 
 ##    Finalizing the design
+Here is the final result of my project:
+
 <img src="https://github.com/gnowin/iot-project/assets/100692493/7fb8958b-f80d-49b3-96c1-c5bd53c4067d" alt="finalresult" style="width:100%;"/>
 
+The result is simpler than what I first imagined I would do. I had several ideas that included an LCD screen I had around to make an interactive system, but I realized late into the project that the contrast of the screen was not working properly. I also wanted to explore Node-RED to control the microcontroller wirelessly, but that will have to be a future project. But overall I am happy that I managed to get a plan B working and I still learned a lot throughout this course.
