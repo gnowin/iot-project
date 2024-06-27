@@ -192,9 +192,15 @@ def send_data(c, led, msg):
 ```
 
 ##    Presenting the data
+Using Grafana I have built a dashboard to visualize my data.
+
 <img src="https://github.com/gnowin/iot-project/assets/100692493/c6a61c10-213c-4201-b367-4bcdf54784b3" alt="grafanapc" style="width:100%;"/>
 
 <img src="https://github.com/gnowin/iot-project/assets/100692493/7e5d7b7c-5ef8-43d7-af50-cde740674a59" alt="grafanamobile" style="width:50%;"/>
+
+<img src="https://github.com/gnowin/iot-project/assets/100692493/4f1c7405-3e84-447b-b7ab-244811bb9f92" alt="grafanamobile2" style="width:50%;"/>
+
+
 
 
 ##    Finalizing the design
