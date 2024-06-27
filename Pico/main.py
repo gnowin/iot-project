@@ -24,9 +24,8 @@ def main():
     # Piezo
     buzzer = PWM(Pin(17))
 
-    # RGB LED
+    # RGB LED (only red and blue)
     ledR = PWM(Pin(11), freq=300_00, duty_u16=0)
-    #ledG = PWM(Pin(15), freq=300_00, duty_u16=0)
     ledB = PWM(Pin(14), freq=300_00, duty_u16=0)
 
     #Try to connect, reconnect
